@@ -1,6 +1,9 @@
 import punq
 from django.conf import LazySettings, settings
 
+from server.apps.collects.infra.repository import CollectRepo
+from server.apps.payments.infra.repository import PaymentRepo
+
 
 def _inject_settings(container: punq.Container) -> None:
     """Register settings."""
@@ -9,7 +12,8 @@ def _inject_settings(container: punq.Container) -> None:
 
 def _injest_infra(container: punq.Container) -> None:
     """Register repositories."""
-    pass
+    container.register(CollectRepo)
+    container.register(PaymentRepo)
 
 
 def create_container() -> punq.Container:
