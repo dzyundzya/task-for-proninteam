@@ -1,9 +1,9 @@
-class Collect:
-    TITLE_LENGTH = 255
-    OCCASION_LENGTH = 25
-    MAX_DIGITS = 12
-    DECIMAL_PLACES = 2
-    ZERO = 0
+TITLE_LENGTH: int = 255
+OCCASION_LENGTH: int = 25
+MAX_DIGITS: int = 12
+DECIMAL_PLACES: int = 2
+ZERO: int = 0
+ONE: int = 1
 
-    PLANNED_HELP_TEXT = 'Leave it empty for endless collection.'
-    UPLOAD_TO = 'colletcs/covers/'
+PLANNED_HELP_TEXT: str = 'Leave it empty for endless collection.'
+UPLOAD_TO: str = 'colletcs/covers/'

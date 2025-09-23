@@ -5,7 +5,7 @@ from django.db import models
 from django.utils.timezone import now
 
 from server.apps.collects.choices import OccasionType
-from server.common.constants import Collect as constant
+from server.common import constants
 
 class  Collect(models.Model):
     author = models.ForeignKey(
@@ -14,36 +14,36 @@ class  Collect(models.Model):
         related_name='collects',
         verbose_name='Author'
     )
-    title = models.CharField('Title', max_length=constant.TITLE_LENGTH)
+    title = models.CharField('Title', max_length=constants.TITLE_LENGTH)
     occasion = models.CharField(
         'Occasion',
-        max_length=constant.OCCASION_LENGTH,
+        max_length=constants.OCCASION_LENGTH,
         choices=OccasionType.choices,
         default=OccasionType.OTHER,
     )
     description = models.TextField('Description', blank=True)
     planned_amount = models.DecimalField(
         'Amount planned',
-        max_digits=constant.MAX_DIGITS,
-        decimal_places=constant.DECIMAL_PLACES,
+        max_digits=constants.MAX_DIGITS,
+        decimal_places=constants.DECIMAL_PLACES,
         null=True, blank=True,
-        help_text=constant.PLANNED_HELP_TEXT,
-        validators=[MinValueValidator(constant.ZERO),],
+        help_text=constants.PLANNED_HELP_TEXT,
+        validators=[MinValueValidator(constants.ZERO),],
     )
     current_amount = models.DecimalField(
         'Amount current',
-        max_digits=constant.MAX_DIGITS,
-        decimal_places=constant.DECIMAL_PLACES,
-        default=constant.ZERO,
-        validators=[MinValueValidator(constant.ZERO),],
+        max_digits=constants.MAX_DIGITS,
+        decimal_places=constants.DECIMAL_PLACES,
+        default=constants.ZERO,
+        validators=[MinValueValidator(constants.ZERO),],
     )
     donations_count = models.PositiveIntegerField(
         'Number of donations',
-        default=constant.ZERO,
+        default=constants.ZERO,
     )
     cover_image = models.ImageField(
         'Cover',
-        upload_to=constant.UPLOAD_TO,
+        upload_to=constants.UPLOAD_TO,
         blank=True
     )
     end_date = models.DateTimeField('End date', null=True, blank=True)
