@@ -5,6 +5,7 @@ from django.db import models
 
 from server.common import constants
 
+
 class Payment(models.Model):
     user = models.ForeignKey(
         'users.CustomUser',
@@ -22,7 +23,9 @@ class Payment(models.Model):
         'Amount',
         max_digits=constants.MAX_DIGITS,
         decimal_places=constants.DECIMAL_PLACES,
-        validators=[MinValueValidator(constants.ONE),],
+        validators=[
+            MinValueValidator(constants.ONE),
+        ],
     )
     comment = models.TextField('Comment', blank=True)
     paid = models.BooleanField('Paid', default=False)
@@ -37,7 +40,4 @@ class Payment(models.Model):
 
     @override
     def __str__(self) -> str:
-        return '{username}: {amount} rub.'.format(
-        username=self.user.username,
-        amount=self.amount,
-    )
+        return f'{self.user.username}: {self.amount} rub.'

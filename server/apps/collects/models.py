@@ -7,12 +7,13 @@ from django.utils.timezone import now
 from server.apps.collects.choices import OccasionType
 from server.common import constants
 
-class  Collect(models.Model):
+
+class Collect(models.Model):
     author = models.ForeignKey(
         'users.CustomUser',
         on_delete=models.CASCADE,
         related_name='collects',
-        verbose_name='Author'
+        verbose_name='Author',
     )
     title = models.CharField('Title', max_length=constants.TITLE_LENGTH)
     occasion = models.CharField(
@@ -26,25 +27,28 @@ class  Collect(models.Model):
         'Amount planned',
         max_digits=constants.MAX_DIGITS,
         decimal_places=constants.DECIMAL_PLACES,
-        null=True, blank=True,
+        null=True,
+        blank=True,
         help_text=constants.PLANNED_HELP_TEXT,
-        validators=[MinValueValidator(constants.ZERO),],
+        validators=[
+            MinValueValidator(constants.ZERO),
+        ],
     )
     current_amount = models.DecimalField(
         'Amount current',
         max_digits=constants.MAX_DIGITS,
         decimal_places=constants.DECIMAL_PLACES,
         default=constants.ZERO,
-        validators=[MinValueValidator(constants.ZERO),],
+        validators=[
+            MinValueValidator(constants.ZERO),
+        ],
     )
     donations_count = models.PositiveIntegerField(
         'Number of donations',
         default=constants.ZERO,
     )
     cover_image = models.ImageField(
-        'Cover',
-        upload_to=constants.UPLOAD_TO,
-        blank=True
+        'Cover', upload_to=constants.UPLOAD_TO, blank=True
     )
     end_date = models.DateTimeField('End date', null=True, blank=True)
     is_active = models.BooleanField('Active', default=True)
@@ -60,24 +64,30 @@ class  Collect(models.Model):
                 fields=['title', 'author'],
                 name='unique_collect_per_author',
             ),
+            models.CheckConstraint(
+                name="collects_collect_occasion_valid",
+                condition=models.Q(
+                    occasion__in=[choice[0] for choice in OccasionType]
+                )
+            )
         )
 
     @override
     def __str__(self) -> str:
         return self.title
-    
+
     @property
     def is_unlimited(self) -> bool:
         """Checks whether the collection is infinite."""
         return self.planned_amount is None
-    
+
     @property
     def progress_percentage(self) -> int:
         """Percentage of the collected amount."""
         if self.is_unlimited or self.planned_amount == 0:
             return 0
         return min(100, (self.current_amount / self.planned_amount) * 100)
-    
+
     @property
     def days_remaining(self) -> None | int:
         """The remaining number of days until completion."""
@@ -85,5 +95,3 @@ class  Collect(models.Model):
             return None
         remaining = self.end_date - now()
         return max(0, remaining.days)
-
-
