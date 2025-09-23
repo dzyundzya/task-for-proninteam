@@ -92,7 +92,7 @@ WSGI_APPLICATION = 'server.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',  # Database engine
-        'NAME': BASE_DIR / 'db.sqlite3',        # Database file path
+        'NAME': BASE_DIR / 'db.sqlite3',  # Database file path
     }
 }
 
@@ -202,3 +202,5 @@ PERMISSIONS_POLICY: dict[str, str | list[str]] = {}
 # https://docs.djangoproject.com/en/5.2/ref/settings/#std:setting-EMAIL_TIMEOUT
 
 EMAIL_TIMEOUT = 5
+
+AUTH_USER_MODEL = 'users.CustomUser'

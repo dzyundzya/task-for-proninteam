@@ -20,7 +20,6 @@ admin.autodiscover()
 
 urlpatterns = [
     # Apps:
-    
     # Health checks:
     path('health/', include(health_urls)),
     # django-admin:
