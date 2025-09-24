@@ -4,7 +4,7 @@ from server.apps.payments.models import Payment
 from server.apps.users.serializers import UserSerializer
 
 
-class PaymentSerializer(serializers.ModelSerializer):
+class PaymentSerializer(serializers.ModelSerializer[Payment]):
     user = UserSerializer(read_only=True)
 
     class Meta:
