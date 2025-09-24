@@ -5,6 +5,7 @@ from django.db import models
 from django.utils.timezone import now
 
 from server.apps.collects.choices import OccasionType
+from server.apps.payments.models import Payment
 from server.common import constants
 
 
@@ -67,7 +68,7 @@ class Collect(models.Model):
             models.CheckConstraint(
                 name="collects_collect_occasion_valid",
                 condition=models.Q(
-                    occasion__in=[choice[0] for choice in OccasionType]
+                    occasion__in=[choice[0] for choice in OccasionType.choices]
                 )
             )
         )
@@ -95,3 +96,9 @@ class Collect(models.Model):
             return None
         remaining = self.end_date - now()
         return max(0, remaining.days)
+    
+    def update_amounts(self) -> None:
+        payments = Payment.objects.filter(collect=self, paid=True)
+        self.current_amount = sum(payment.amount for payment in payments)
+        self.donations_count = payments.values('user').distinct().count()
+        self.save(update_fields=('current_amount', 'donations_count', 'updated_at'))

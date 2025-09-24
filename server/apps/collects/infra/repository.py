@@ -4,6 +4,7 @@ from django.db.models import QuerySet
 
 from server.apps.collects.models import Collect
 
+
 @final
 class CollectRepo:
     """Repository for Collect model."""

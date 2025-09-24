@@ -4,6 +4,7 @@ from django.db.models import QuerySet
 
 from server.apps.payments.models import Payment
 
+
 @final
 class PaymentRepo:
     """Repository for Collect model."""
