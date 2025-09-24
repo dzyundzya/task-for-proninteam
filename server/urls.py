@@ -17,6 +17,7 @@ from django.views.generic import TemplateView
 from health_check import urls as health_urls
 
 from server.apps.payments import urls as payments_urls
+from server.apps.users import urls as users_urls
 from server.di import resolve
 
 contrib.admin.autodiscover()
@@ -26,6 +27,8 @@ settings = resolve(conf.LazySettings)
 urlpatterns = [
     # Payments API:
     path('api/', include(payments_urls)),
+    # Users API:
+    path('api/', include(users_urls)),
     # Health checks:
     path('health/', include(health_urls)),
     # django-admin:

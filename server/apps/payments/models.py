@@ -42,22 +42,3 @@ class Payment(models.Model):
     @override
     def __str__(self) -> str:
         return f'{self.user.username}: {self.amount} rub.'
-    
-    @override
-    def save(self, *args, **kwargs) -> None:
-        from server.apps.payments.infra.repository import PaymentRepo
-        from server.di import resolve
-        is_new = self._state.adding
-        old_paid = None
-        repo = resolve(PaymentRepo)
-
-        if not is_new:
-            try:
-                old_paid = repo.get_by_pk(pk=self.pk).paid
-            except Payment.DoesNotExist:
-                pass
-
-        super().save(*args, **kwargs)
-
-        if is_new and self.paid or (not is_new and self.paid != old_paid):
-            self.collect.update_amounts()
