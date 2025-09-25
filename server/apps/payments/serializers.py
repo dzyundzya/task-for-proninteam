@@ -13,14 +13,14 @@ class PaymentSerializer(serializers.ModelSerializer[Payment]):
     class Meta:
         model = Payment
         fields = (
-            'id', 
+            'id',
             'user',
-            'collect', 
-            'amount', 
-            'comment', 
-            'paid', 
-            'payment_day', 
-            'created_at'
+            'collect',
+            'amount',
+            'comment',
+            'paid',
+            'payment_day',
+            'created_at',
         )
 
     def create(self, validated_data: dict[str, Any]) -> Any:
@@ -28,14 +28,12 @@ class PaymentSerializer(serializers.ModelSerializer[Payment]):
         payment = super().create(validated_data)
         CollectAmountService.update_collect_amounts(payment.collect)
         return payment
-    
-    def update(
-        self, instance: Payment, validated_data: dict[str, Any]
-    ) -> Any:
+
+    def update(self, instance: Payment, validated_data: dict[str, Any]) -> Any:
         old_paid_status = instance.paid
         new_paid_status = validated_data.get('paid', old_paid_status)
         payment = super().update(instance, validated_data)
-        
+
         if new_paid_status != old_paid_status:
             CollectAmountService.update_collect_amounts(payment.collect)
         return payment

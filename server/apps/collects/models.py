@@ -5,11 +5,12 @@ from django.db import models
 from django.utils.timezone import now
 
 from server.apps.collects.choices import OccasionType
-from server.apps.payments.models import Payment
 from server.common import constants
 
 
 class Collect(models.Model):
+    """Collect model."""
+
     author = models.ForeignKey(
         'users.CustomUser',
         on_delete=models.CASCADE,
@@ -66,11 +67,11 @@ class Collect(models.Model):
                 name='unique_collect_per_author',
             ),
             models.CheckConstraint(
-                name="collects_collect_occasion_valid",
+                name='collects_collect_occasion_valid',
                 condition=models.Q(
                     occasion__in=[choice[0] for choice in OccasionType.choices]
-                )
-            )
+                ),
+            ),
         )
 
     @override

@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -18,14 +17,27 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='collect',
             name='author',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='collects', to=settings.AUTH_USER_MODEL, verbose_name='Author'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='collects',
+                to=settings.AUTH_USER_MODEL,
+                verbose_name='Author',
+            ),
         ),
         migrations.AddConstraint(
             model_name='collect',
-            constraint=models.UniqueConstraint(fields=('title', 'author'), name='unique_collect_per_author'),
+            constraint=models.UniqueConstraint(
+                fields=('title', 'author'), name='unique_collect_per_author'
+            ),
         ),
         migrations.AddConstraint(
             model_name='collect',
-            constraint=models.CheckConstraint(condition=models.Q(('occasion__in', ['b', 'w', 'c', 'm', 'e', 't', 'b', 'o'])), name='collects_collect_occasion_valid'),
+            constraint=models.CheckConstraint(
+                condition=models.Q((
+                    'occasion__in',
+                    ['b', 'w', 'c', 'm', 'e', 't', 'b', 'o'],
+                )),
+                name='collects_collect_occasion_valid',
+            ),
         ),
     ]

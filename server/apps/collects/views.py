@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, override
 
 from django.db.models import QuerySet
 from rest_framework import status, viewsets
@@ -11,7 +11,7 @@ from server.apps.collects.serializers import CollectSerializer
 from server.di import resolve
 
 
-class CollectViewSet(viewsets.ModelViewSet[Collect]):
+class CollectViewSet(viewsets.ModelViewSet[Collect]):  # noqa: WPS214
     serializer_class = CollectSerializer
     http_method_names = ('get', 'post', 'patch', 'delete')
 
@@ -24,7 +24,7 @@ class CollectViewSet(viewsets.ModelViewSet[Collect]):
         context = super().get_serializer_context()
         context['request'] = self.request
         return context
-    
+
     def list(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         page = self.paginate_queryset(self.get_queryset())
         if page is not None:
@@ -32,12 +32,12 @@ class CollectViewSet(viewsets.ModelViewSet[Collect]):
             return self.get_paginated_response(serializer.data)
         serializer = self.get_serializer(self.get_queryset(), many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     def retrieve(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         collect = self.repo.get_by_pk(kwargs['pk'])
         serializer = self.get_serializer(collect)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     def create(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -46,7 +46,7 @@ class CollectViewSet(viewsets.ModelViewSet[Collect]):
             self.get_serializer(collect).data,
             status=status.HTTP_201_CREATED,
         )
-    
+
     def partial_update(
         self, request: Request, *args: Any, **kwargs: Any
     ) -> Response:
@@ -54,7 +54,7 @@ class CollectViewSet(viewsets.ModelViewSet[Collect]):
         if collect.author != request.user:
             return Response(
                 {'error': 'You can edit only your own collections.'},
-                status=status.HTTP_403_FORBIDDEN
+                status=status.HTTP_403_FORBIDDEN,
             )
         serializer = self.get_serializer(
             collect, data=request.data, partial=True
@@ -63,7 +63,7 @@ class CollectViewSet(viewsets.ModelViewSet[Collect]):
         upd_collect = serializer.save()
         return Response(
             self.get_serializer(upd_collect).data,
-            status=status.HTTP_202_ACCEPTED
+            status=status.HTTP_202_ACCEPTED,
         )
 
     def destroy(self, request: Request, *args: Any, **kwargs: Any) -> Response:
@@ -80,5 +80,3 @@ class CollectViewSet(viewsets.ModelViewSet[Collect]):
     @property
     def repo(self) -> CollectRepo:
         return resolve(CollectRepo)
-    
-    

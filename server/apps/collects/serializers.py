@@ -50,7 +50,7 @@ class CollectSerializer(serializers.ModelSerializer[Collect]):
             raise serializers.ValidationError({
                 'end_date': 'The end date should be in the future.'
             })
-        
+
         planned_amount = collect_data.get('planned_amount')
         if planned_amount and planned_amount < 0:
             raise serializers.ValidationError({
@@ -61,6 +61,6 @@ class CollectSerializer(serializers.ModelSerializer[Collect]):
     def create(self, validated_data: dict[str, Any]) -> Any:
         validated_data['author'] = self.context['request'].user
         collect = super().create(validated_data)
-        
+
         CollectAmountService.update_collect_amounts(collect)
         return collect

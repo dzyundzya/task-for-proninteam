@@ -6,8 +6,9 @@ from django.db import models
 from server.common import constants
 
 
-
 class Payment(models.Model):
+    """Payment model."""
+
     user = models.ForeignKey(
         'users.CustomUser',
         on_delete=models.CASCADE,
@@ -41,4 +42,4 @@ class Payment(models.Model):
 
     @override
     def __str__(self) -> str:
-        return f'{self.user.username}: {self.amount} rub.'
+        return f'{self.user.username}: {self.amount} rub.'  # noqa: WPS237

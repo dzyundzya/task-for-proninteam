@@ -1,4 +1,4 @@
-from typing import Any, override
+from typing import Any
 
 from django.db.models import QuerySet
 from rest_framework import status, viewsets
@@ -12,7 +12,6 @@ from server.di import resolve
 
 
 class PaymentViewSet(viewsets.ModelViewSet[Payment]):
-
     serializer_class = PaymentSerializer
     http_method_names = ('get', 'post', 'patch')
 
@@ -27,7 +26,7 @@ class PaymentViewSet(viewsets.ModelViewSet[Payment]):
         context = super().get_serializer_context()
         context['request'] = self.request
         return context
-    
+
     def partial_update(
         self, request: Request, *args: Any, **kwargs: Any
     ) -> Response:
@@ -37,14 +36,15 @@ class PaymentViewSet(viewsets.ModelViewSet[Payment]):
             payment, data=request.data, partial=True
         )
         serlializer.is_valid(raise_exception=True)
-        upd_payment = self.repo.update_payment(payment, **serlializer.validated_data)
+        upd_payment = self.repo.update_payment(
+            payment, **serlializer.validated_data
+        )
         return Response(
             self.get_serializer(upd_payment).data,
-            status=status.HTTP_202_ACCEPTED
+            status=status.HTTP_202_ACCEPTED,
         )
-    
+
     @property
     def repo(self) -> PaymentRepo:
         """Get DepartmentRepo instance from dependency container."""
         return resolve(PaymentRepo)
-

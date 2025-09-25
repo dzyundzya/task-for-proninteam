@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('collects', '0002_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
@@ -18,6 +17,21 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name='collect',
-            constraint=models.CheckConstraint(condition=models.Q(('occasion__in', ['birthday', 'wedding', 'charity', 'medical', 'education', 'travel', 'business', 'other'])), name='collects_collect_occasion_valid'),
+            constraint=models.CheckConstraint(
+                condition=models.Q((
+                    'occasion__in',
+                    [
+                        'birthday',
+                        'wedding',
+                        'charity',
+                        'medical',
+                        'education',
+                        'travel',
+                        'business',
+                        'other',
+                    ],
+                )),
+                name='collects_collect_occasion_valid',
+            ),
         ),
     ]
