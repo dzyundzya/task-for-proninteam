@@ -8,7 +8,9 @@ from server.apps.collects.services import CollectAmountService
 from server.apps.users.serializers import UserSerializer
 
 
-class CollectSerializer(serializers.ModelSerializer[Collect]):
+class CollectSerializer(serializers.ModelSerializer[Collect]):  # type: ignore[misc]
+    """Serializer for Collect model."""
+
     is_unlimited = serializers.ReadOnlyField()
     progress_percentage = serializers.ReadOnlyField()
     days_remaining = serializers.ReadOnlyField()
@@ -45,6 +47,7 @@ class CollectSerializer(serializers.ModelSerializer[Collect]):
         )
 
     def validate(self, collect_data: dict[str, Any]) -> dict[str, Any]:
+        """Validate collect data."""
         end_date = collect_data.get('end_date')
         if end_date and end_date <= now():
             raise serializers.ValidationError({
@@ -59,6 +62,7 @@ class CollectSerializer(serializers.ModelSerializer[Collect]):
         return collect_data
 
     def create(self, validated_data: dict[str, Any]) -> Any:
+        """Create a new collect instance."""
         validated_data['author'] = self.context['request'].user
         collect = super().create(validated_data)
 

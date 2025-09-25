@@ -86,12 +86,16 @@ class Collect(models.Model):
     @property
     def progress_percentage(self) -> int:
         """Percentage of the collected amount."""
-        if self.is_unlimited or self.planned_amount == 0:
+        if (
+            self.is_unlimited
+            or not self.planned_amount
+            or self.planned_amount == 0
+        ):
             return 0
-        return self.current_amount / self.planned_amount * 100
+        return int(self.current_amount / self.planned_amount * 100)
 
     @property
-    def days_remaining(self) -> None | int:
+    def days_remaining(self) -> int | None:
         """The remaining number of days until completion."""
         if not self.end_date:
             return None

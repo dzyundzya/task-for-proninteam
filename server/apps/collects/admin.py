@@ -6,6 +6,7 @@ from server.apps.collects.models import Collect
 @admin.register(Collect)
 class CollectAdmin(admin.ModelAdmin[Collect]):
     """Admin interface for the Collect model."""
+
     list_display = (
         'id',
         'title',

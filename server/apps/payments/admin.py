@@ -4,8 +4,9 @@ from server.apps.payments.models import Payment
 
 
 @admin.register(Payment)
-class PaymentAdmin(admin.ModelAdmin):
+class PaymentAdmin(admin.ModelAdmin[Payment]):
     """Admin interface for the Payment model."""
+
     list_display = ('id', 'user', 'collect', 'amount', 'paid', 'created_at')
     search_fields = (
         'collect__title',

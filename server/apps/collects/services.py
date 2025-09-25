@@ -5,8 +5,11 @@ from server.apps.payments.models import Payment
 
 
 class CollectAmountService:
+    """Service for managing collect amounts and donations calculations."""
+
     @classmethod
     def update_collect_amounts(cls, collect: Collect) -> None:
+        """Update current amount and donations count for a collect."""
         aggregated_data = Payment.objects.filter(
             collect=collect,
             paid=True,
@@ -23,5 +26,6 @@ class CollectAmountService:
 
     @classmethod
     def recalculate_all_collects(cls) -> None:
+        """Recalculate amounts for all collects."""
         for collect in Collect.objects.all():
             cls.update_collect_amounts(collect)
