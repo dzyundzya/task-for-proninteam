@@ -10,12 +10,12 @@ files serving technique in development.
 """
 
 from django import conf, contrib
-from django.contrib import admin
 from django.contrib.admindocs import urls as admindocs_urls
 from django.urls import include, path
 from django.views.generic import TemplateView
 from health_check import urls as health_urls
 
+from server.apps.collects import urls as collects_urls
 from server.apps.payments import urls as payments_urls
 from server.apps.users import urls as users_urls
 from server.di import resolve
@@ -25,6 +25,8 @@ contrib.admin.autodiscover()
 settings = resolve(conf.LazySettings)
 
 urlpatterns = [
+    # Collects APi:
+    path('api/', include(collects_urls)),
     # Payments API:
     path('api/', include(payments_urls)),
     # Users API:

@@ -87,7 +87,7 @@ class Collect(models.Model):
         """Percentage of the collected amount."""
         if self.is_unlimited or self.planned_amount == 0:
             return 0
-        return min(100, (self.current_amount / self.planned_amount) * 100)
+        return self.current_amount / self.planned_amount * 100
 
     @property
     def days_remaining(self) -> None | int:

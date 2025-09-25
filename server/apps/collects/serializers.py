@@ -1,7 +1,7 @@
 from typing import Any
 
+from django.utils.timezone import now
 from rest_framework import serializers
-from rest_framework.utils import timezone
 
 from server.apps.collects.models import Collect
 from server.apps.collects.services import CollectAmountService
@@ -46,7 +46,7 @@ class CollectSerializer(serializers.ModelSerializer[Collect]):
 
     def validate(self, collect_data: dict[str, Any]) -> dict[str, Any]:
         end_date = collect_data.get('end_date')
-        if end_date and end_date <= timezone.now():
+        if end_date and end_date <= now():
             raise serializers.ValidationError({
                 'end_date': 'The end date should be in the future.'
             })
@@ -58,7 +58,7 @@ class CollectSerializer(serializers.ModelSerializer[Collect]):
             })
         return collect_data
 
-    def create(self, validated_data: dict[str, Any]) -> None:
+    def create(self, validated_data: dict[str, Any]) -> Any:
         validated_data['author'] = self.context['request'].user
         collect = super().create(validated_data)
         

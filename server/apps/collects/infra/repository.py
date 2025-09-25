@@ -15,7 +15,7 @@ class CollectRepo:
     
     def get_all_active(self) -> QuerySet[Collect]:
         """Returns all is_active collect options from DB."""
-        return Collect.objects.select_related('author').filter('is_active')
+        return Collect.objects.select_related('author').filter(is_active=True)
     
     def get_by_pk(self, pk: int) -> Collect:
         """Returns one collect option from DB by pk."""

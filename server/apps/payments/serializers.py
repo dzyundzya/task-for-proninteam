@@ -14,7 +14,8 @@ class PaymentSerializer(serializers.ModelSerializer[Payment]):
         model = Payment
         fields = (
             'id', 
-            'user', 
+            'user',
+            'collect', 
             'amount', 
             'comment', 
             'paid', 
@@ -23,6 +24,7 @@ class PaymentSerializer(serializers.ModelSerializer[Payment]):
         )
 
     def create(self, validated_data: dict[str, Any]) -> Any:
+        validated_data['user'] = self.context['request'].user
         payment = super().create(validated_data)
         CollectAmountService.update_collect_amounts(payment.collect)
         return payment
