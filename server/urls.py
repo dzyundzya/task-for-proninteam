@@ -9,23 +9,33 @@ This examples uses Django's default media
 files serving technique in development.
 """
 
-from django.conf import settings
-from django.contrib import admin
+from django import conf, contrib
 from django.contrib.admindocs import urls as admindocs_urls
 from django.urls import include, path
 from django.views.generic import TemplateView
 from health_check import urls as health_urls
 
-admin.autodiscover()
+from server.apps.collects import urls as collects_urls
+from server.apps.payments import urls as payments_urls
+from server.apps.users import urls as users_urls
+from server.di import resolve
+
+contrib.admin.autodiscover()
+
+settings = resolve(conf.LazySettings)
 
 urlpatterns = [
-    # Apps:
-    
+    # Collects APi:
+    path('api/', include(collects_urls)),
+    # Payments API:
+    path('api/', include(payments_urls)),
+    # Users API:
+    path('api/', include(users_urls)),
     # Health checks:
     path('health/', include(health_urls)),
     # django-admin:
     path('admin/doc/', include(admindocs_urls)),
-    path('admin/', admin.site.urls),
+    path('admin/', contrib.admin.site.urls),
     # Text and xml static files:
     path(
         'robots.txt',

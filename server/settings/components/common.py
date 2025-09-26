@@ -1,12 +1,5 @@
-"""
-Django settings for server project.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/5.2/topics/settings/
-
-For the full list of settings and their config, see
-https://docs.djangoproject.com/en/5.2/ref/settings/
-"""
+import os
+from datetime import timedelta
 
 from django.utils.translation import gettext_lazy as _
 
@@ -42,6 +35,9 @@ INSTALLED_APPS: tuple[str, ...] = (
     'health_check.db',
     'health_check.cache',
     'health_check.storage',
+    # DRF apps
+    'rest_framework',
+    'djoser',
 )
 
 MIDDLEWARE: tuple[str, ...] = (
@@ -92,7 +88,7 @@ WSGI_APPLICATION = 'server.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',  # Database engine
-        'NAME': BASE_DIR / 'db.sqlite3',        # Database file path
+        'NAME': BASE_DIR / 'db.sqlite3',  # Database file path
     }
 }
 
@@ -202,3 +198,26 @@ PERMISSIONS_POLICY: dict[str, str | list[str]] = {}
 # https://docs.djangoproject.com/en/5.2/ref/settings/#std:setting-EMAIL_TIMEOUT
 
 EMAIL_TIMEOUT = 5
+
+AUTH_USER_MODEL = 'users.CustomUser'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(
+        days=int(os.getenv('JWT_ACCESS_DAYS', '15'))
+    ),
+    'REFRESH_TOKEN_LIFETIME': timedelta(
+        days=int(os.getenv('JWT_REFRESH_DAYS', '7'))
+    ),
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
