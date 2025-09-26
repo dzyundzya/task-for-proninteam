@@ -19,9 +19,9 @@ class CollectViewSet(viewsets.ModelViewSet[Collect]):  # type: ignore[misc]  # n
 
     def get_queryset(self) -> QuerySet[Collect]:
         """Get queryset using repo."""
-        return {
-            'list': self.repo.get_all_active()
-        }.get(self.action, self.repo.get_all())
+        return {'list': self.repo.get_all_active()}.get(
+            self.action, self.repo.get_all()
+        )
 
     def get_serializer_context(self) -> Any:
         """Add request to serializer context."""

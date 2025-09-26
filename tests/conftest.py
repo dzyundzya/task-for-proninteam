@@ -14,4 +14,4 @@ pytest_plugins = [
     'plugins.payments',
     'plugins.collects',
     'plugins.users_clinets',
-]  
+]

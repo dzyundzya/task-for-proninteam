@@ -20,7 +20,7 @@ def test_create_payment(auth_client: APIClient, collect: Collect) -> None:
         'amount': Decimal(500),
         'comment': 'Test comment',
         'paid': True,
-        'payment_day': now()
+        'payment_day': now(),
     }
 
     response = auth_client.post(url, payload, format='json')
@@ -54,6 +54,37 @@ def test_patch_success(
 
 @pytest.mark.django_db
 def test_get_queryset(payment: Payment, auth_client: APIClient) -> None:
+    """Test that get_queryset returns payments with proper filtering."""
     viewset = PaymentViewSet()
     queryset = viewset.get_queryset()
     assert queryset.count() == 1
+
+
+@pytest.mark.django_db
+def test_patch_by_none_author(
+    payment: Payment, auth_none_author_client: APIClient
+) -> None:
+    """Test that non-owner cannot patch a payment."""
+    url = reverse('payments-detail', kwargs={'pk': payment.pk})
+    payload = {
+        'comment': 'Update_comment',
+    }
+    response = auth_none_author_client.patch(url, payload, format='json')
+
+    assert response.status_code == HTTPStatus.FORBIDDEN
+
+
+@pytest.mark.django_db
+def test_get_by_none_author(
+    payment: Payment, auth_none_author_client: APIClient
+) -> None:
+    """Test that non-author user can retrieve payment details and list."""
+    url_detail = reverse('payments-detail', kwargs={'pk': payment.pk})
+    response_detail = auth_none_author_client.get(url_detail)
+
+    assert response_detail.status_code == HTTPStatus.OK
+
+    url = reverse('payments-list')
+    response = auth_none_author_client.get(url)
+
+    assert response.status_code == HTTPStatus.OK

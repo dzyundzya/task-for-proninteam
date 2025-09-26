@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
+from datetime import datetime
 from decimal import Decimal
 from typing import TYPE_CHECKING, TypedDict, Unpack
 
@@ -12,11 +13,9 @@ from server.apps.payments.models import Payment
 from server.apps.users.models import CustomUser
 
 if TYPE_CHECKING:
-    from tests.plugins.fakery import FakeryM  
+    from tests.plugins.fakery import FakeryM
 
-type PaymentFactory = Callable[
-    [Unpack[_PaymentFactoryParams]], Payment
-]
+type PaymentFactory = Callable[[Unpack[_PaymentFactoryParams]], Payment]
 
 type PaymentBatchFactory = Callable[[int], list[Payment]]
 
@@ -29,7 +28,7 @@ class _PaymentFactoryParams(TypedDict, total=False):
     amount: Decimal
     comment: str
     paid: bool
-    payment_day: timezone.datetime
+    payment_day: datetime
 
 
 @pytest.fixture
@@ -43,13 +42,14 @@ def payment_factory(fakery_m: FakeryM[Payment]) -> PaymentFactory:
 
 
 @pytest.fixture
-def payment(payment_factory: PaymentFactory) -> Payment:
+def payment(payment_factory: PaymentFactory, auth_user: CustomUser) -> Payment:
     """Return a single Payment instance created."""
     return payment_factory(
+        user=auth_user,
         amount=Decimal(100),
         comment='Test_comment',
         paid=True,
-        payment_day=timezone.now()
+        payment_day=timezone.now(),
     )
 
 

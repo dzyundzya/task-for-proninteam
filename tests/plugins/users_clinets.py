@@ -21,7 +21,7 @@ class _UserFactoryParams(TypedDict, total=False):
 
     username: str
     email: str
-    first_name : str
+    first_name: str
     last_name: str
     password: str
     is_active: bool
@@ -77,7 +77,7 @@ def auth_client(api_client: APIClient, auth_user: CustomUser) -> APIClient:
 @pytest.fixture
 def auth_none_author_client(
     api_client: APIClient, auth_none_author: CustomUser
-    ) -> APIClient:
+) -> APIClient:
     """Return an authenticated APIClient for testing."""
     api_client.force_authenticate(user=auth_none_author)
     return api_client

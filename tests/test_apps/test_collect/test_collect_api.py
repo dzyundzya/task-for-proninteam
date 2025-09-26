@@ -15,30 +15,28 @@ from tests.plugins.collects import CollectBatchFactory
 
 @pytest.mark.django_db
 def test_validate_past_end_date(auth_client: APIClient) -> None:
-        """Test validate raises error for past end_date."""
-        serializer = CollectSerializer(context={'request': None})
-        
-        invalid_data = {
-            'title': 'Invalid Collect',
-            'occasion': 'Birthday',
-            'end_date': now() - timedelta(days=1),
-            'planned_amount': Decimal('1000.00')
-        }
-        
-        with pytest.raises(ValidationError) as exc_info:
-            serializer.validate(invalid_data)
+    """Test validate raises error for past end_date."""
+    serializer = CollectSerializer(context={'request': None})
+
+    invalid_data = {
+        'title': 'Invalid Collect',
+        'occasion': 'Birthday',
+        'end_date': now() - timedelta(days=1),
+        'planned_amount': Decimal('1000.00'),
+    }
+
+    with pytest.raises(ValidationError):
+        serializer.validate(invalid_data)
 
 
 @pytest.mark.django_db
 def test_validate_negative_planned_amount(auth_client: APIClient) -> None:
     """Test validation raises error for negative planned_amount."""
     serializer = CollectSerializer(context={'request': None})
-    
-    invalid_data = {
-        'planned_amount': Decimal('-100.00')
-    }
-    
-    with pytest.raises(ValidationError) as exc_info:
+
+    invalid_data = {'planned_amount': Decimal('-100.00')}
+
+    with pytest.raises(ValidationError):
         serializer.validate(invalid_data)
 
 
@@ -46,12 +44,12 @@ def test_validate_negative_planned_amount(auth_client: APIClient) -> None:
 def test_validate_positive(auth_client: APIClient) -> None:
     """Test validation allows positive planned_amount."""
     serializer = CollectSerializer(context={'request': None})
-    
+
     valid_data = {
         'end_date': now() + timedelta(days=5),
-        'planned_amount': Decimal('1000.00')
+        'planned_amount': Decimal('1000.00'),
     }
-    
+
     positive_result = serializer.validate(valid_data)
     assert positive_result == valid_data
 
@@ -65,7 +63,7 @@ def test_create_department(auth_client: APIClient) -> None:
         'occasion': 'other',
         'description': 'Test_description',
         'planned_amount': Decimal(1000),
-        'end_date': now() + timedelta(days=5)
+        'end_date': now() + timedelta(days=5),
     }
 
     response = auth_client.post(url, payload, format='json')
@@ -85,7 +83,6 @@ def test_patch_success(collect: Collect, auth_client: APIClient) -> None:
     url = reverse('collects-detail', kwargs={'pk': collect.pk})
     payload = {
         'title': 'Update_Test_title',
-
     }
     response = auth_client.patch(url, payload, format='json')
     response_data = response.json()
@@ -99,6 +96,7 @@ def test_patch_success(collect: Collect, auth_client: APIClient) -> None:
 def test_patch_by_none_author(
     collect: Collect, auth_none_author_client: APIClient
 ) -> None:
+    """Test that non-author cannot patch a collect."""
     url = reverse('collects-detail', kwargs={'pk': collect.pk})
     payload = {
         'title': 'Update_Test_title',
@@ -115,10 +113,13 @@ def test_delete_success(collect: Collect, auth_client: APIClient) -> None:
     response = auth_client.delete(url, format='json')
 
     assert response.status_code == HTTPStatus.NO_CONTENT
-    
+
 
 @pytest.mark.django_db
-def test_delete_by_none_author(collect: Collect, auth_none_author_client: APIClient) -> None:
+def test_delete_by_none_author(
+    collect: Collect, auth_none_author_client: APIClient
+) -> None:
+    """Test that non-author cannot delete a collect."""
     url = reverse('collects-detail', kwargs={'pk': collect.pk})
     response = auth_none_author_client.delete(url, format='json')
 
@@ -127,6 +128,7 @@ def test_delete_by_none_author(collect: Collect, auth_none_author_client: APICli
 
 @pytest.mark.django_db
 def test_retrieve_success(collect: Collect, auth_client: APIClient) -> None:
+    """Test successfully retrieving a single collect."""
     url = reverse('collects-detail', kwargs={'pk': collect.pk})
     response = auth_client.get(url, format='json')
 
@@ -134,7 +136,10 @@ def test_retrieve_success(collect: Collect, auth_client: APIClient) -> None:
 
 
 @pytest.mark.django_db
-def test_list_success(collect_batch: CollectBatchFactory, auth_client: APIClient) -> None:
+def test_list_success(
+    collect_batch: CollectBatchFactory, auth_client: APIClient
+) -> None:
+    """Test successfully listing collects with pagination."""
     batch_size = 25
     page_size = 10
     collect_batch(batch_size)

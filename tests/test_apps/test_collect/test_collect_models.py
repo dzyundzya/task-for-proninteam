@@ -23,38 +23,34 @@ def test_is_unlimited(collect: Collect) -> None:
 
 
 @pytest.mark.parametrize(
-    'planned_amount, current_amount, exepted_result',
+    ('planned_amount', 'current_amount', 'exepted_result'),
     [
         (Decimal(1000), Decimal(500), 50),
         (Decimal(1000), Decimal(750), 75),
-        (None, Decimal(500), 0)
-    ]
+        (None, Decimal(500), 0),
+    ],
 )
 @pytest.mark.django_db
 def test_progress_percentage(
-    collect: Collect, 
-    planned_amount: Decimal | None, 
+    collect: Collect,
+    planned_amount: Decimal | None,
     current_amount: Decimal,
-    exepted_result: int
+    exepted_result: int,
 ) -> None:
-    collect.planned_amount=planned_amount
-    collect.current_amount=current_amount
+    """Test progress_percentage calculation under different conditions."""
+    collect.planned_amount = planned_amount
+    collect.current_amount = current_amount
     assert collect.progress_percentage == exepted_result
 
 
 @pytest.mark.parametrize(
-    'end_date, exepted_result',
-    [
-        (None, (None,)),
-        (now() + timedelta(days=10), (9,10))
-    ]
+    ('end_date', 'exepted_result'),
+    [(None, (None,)), (now() + timedelta(days=10), (9, 10))],
 )
 @pytest.mark.django_db
 def test_days_remaining(
-    collect: Collect,
-    end_date: datetime | None,
-    exepted_result: tuple[Any]
+    collect: Collect, end_date: datetime | None, exepted_result: tuple[Any]
 ) -> None:
-    collect.end_date=end_date
+    """Test days_remaining calculation under different conditions."""
+    collect.end_date = end_date
     assert collect.days_remaining in exepted_result
-    

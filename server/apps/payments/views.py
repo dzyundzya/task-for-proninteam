@@ -22,7 +22,7 @@ class PaymentViewSet(viewsets.ModelViewSet[Payment]):  # type: ignore[misc]
     def get_queryset(self) -> QuerySet[Payment]:
         """Get queryset."""
         return self.repo.get_all()
-       
+
     def get_serializer_context(self) -> dict[str, Any]:
         """Add request to serializer context."""
         context = super().get_serializer_context()
@@ -34,6 +34,7 @@ class PaymentViewSet(viewsets.ModelViewSet[Payment]):  # type: ignore[misc]
     ) -> Response:
         """Partial update paument using repo."""
         payment = self.repo.get_by_pk(kwargs['pk'])
+        self.check_object_permissions(request, payment)
         serlializer = self.get_serializer(
             payment, data=request.data, partial=True
         )
