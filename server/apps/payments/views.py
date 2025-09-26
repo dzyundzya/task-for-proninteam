@@ -20,12 +20,9 @@ class PaymentViewSet(viewsets.ModelViewSet[Payment]):  # type: ignore[misc]
     permission_classes = (IsPaymentOnwer,)
 
     def get_queryset(self) -> QuerySet[Payment]:
-        """Get queryset filtered by current user."""
-        queryset = self.repo.get_all()
-        if not self.request.user.is_staff:
-            queryset = queryset.filter(user=self.request.user)
-        return queryset
-
+        """Get queryset."""
+        return self.repo.get_all()
+       
     def get_serializer_context(self) -> dict[str, Any]:
         """Add request to serializer context."""
         context = super().get_serializer_context()

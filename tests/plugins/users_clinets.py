@@ -38,24 +38,6 @@ def user_factory(fakery_m: FakeryM[CustomUser]) -> UserFactory:
 
 
 @pytest.fixture
-def user_batch(
-    user_factory: UserFactory,
-) -> UserBatchFactory:
-    """Return a factory that creates `batch_size` User instances."""
-
-    def factory(batch_size: int) -> list[CustomUser]:
-        return [
-            user_factory(
-                username=f'user{user_number}',
-                email=f'user{user_number}@example.ru',
-            )
-            for user_number in range(batch_size)
-        ]
-
-    return factory
-
-
-@pytest.fixture
 def auth_user(user_factory: UserFactory) -> CustomUser:
     """Fixture that create a single User instance."""
     return user_factory(
@@ -65,6 +47,19 @@ def auth_user(user_factory: UserFactory) -> CustomUser:
         last_name='last_name_test',
         is_active=True,
     )
+
+
+@pytest.fixture
+def auth_none_author(user_factory: UserFactory) -> CustomUser:
+    """Fixture that create a single nene author User instance."""
+    return user_factory(
+        username='testnoneuser',
+        email='tesnonet@example.com',
+        first_name='first_name_test',
+        last_name='last_name_test',
+        is_active=True,
+    )
+
 
 @pytest.fixture
 def api_client() -> APIClient:
@@ -76,4 +71,13 @@ def api_client() -> APIClient:
 def auth_client(api_client: APIClient, auth_user: CustomUser) -> APIClient:
     """Return an authenticated APIClient for testing."""
     api_client.force_authenticate(user=auth_user)
+    return api_client
+
+
+@pytest.fixture
+def auth_none_author_client(
+    api_client: APIClient, auth_none_author: CustomUser
+    ) -> APIClient:
+    """Return an authenticated APIClient for testing."""
+    api_client.force_authenticate(user=auth_none_author)
     return api_client

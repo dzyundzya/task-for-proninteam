@@ -23,9 +23,3 @@ class CollectAmountService:
         collect.save(
             update_fields=('current_amount', 'donations_count', 'updated_at')
         )
-
-    @classmethod
-    def recalculate_all_collects(cls) -> None:
-        """Recalculate amounts for all collects."""
-        for collect in Collect.objects.all():
-            cls.update_collect_amounts(collect)

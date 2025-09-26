@@ -19,9 +19,9 @@ class CollectViewSet(viewsets.ModelViewSet[Collect]):  # type: ignore[misc]  # n
 
     def get_queryset(self) -> QuerySet[Collect]:
         """Get queryset using repo."""
-        if self.action == 'list':
-            return self.repo.get_all_active()
-        return self.repo.get_all()
+        return {
+            'list': self.repo.get_all_active()
+        }.get(self.action, self.repo.get_all())
 
     def get_serializer_context(self) -> Any:
         """Add request to serializer context."""
@@ -32,11 +32,8 @@ class CollectViewSet(viewsets.ModelViewSet[Collect]):  # type: ignore[misc]  # n
     def list(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         """List all collects with pagination."""
         page = self.paginate_queryset(self.get_queryset())
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-        serializer = self.get_serializer(self.get_queryset(), many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        serializer = self.get_serializer(page, many=True)
+        return self.get_paginated_response(serializer.data)
 
     def retrieve(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         """Retrieve a specific collect by ID."""

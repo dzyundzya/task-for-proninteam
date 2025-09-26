@@ -43,9 +43,10 @@ def collect_factory(fakery_m: FakeryM[Collect]) -> CollectFactory:
 
 
 @pytest.fixture
-def collect(collect_factory: CollectFactory) -> Collect:
+def collect(collect_factory: CollectFactory, auth_user: CustomUser) -> Collect:
     """Return a single Collect instance created."""
     return collect_factory(
+        author=auth_user,
         title='Test title',
         description='Test description',
         planned_amount=Decimal(5000),
