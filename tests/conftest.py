@@ -12,4 +12,6 @@ pytest_plugins = [
     'plugins.fakery',
     # TODO: add your own plugins here!
     'plugins.payments',
+    'plugins.collects',
+    'plugins.users_clinets',
 ]  

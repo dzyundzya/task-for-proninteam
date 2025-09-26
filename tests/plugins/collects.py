@@ -7,60 +7,63 @@ from typing import TYPE_CHECKING, TypedDict, Unpack
 import pytest
 from django.utils import timezone
 
+from server.apps.collects.choices import OccasionType
 from server.apps.collects.models import Collect
-from server.apps.payments.models import Payment
 from server.apps.users.models import CustomUser
 
 if TYPE_CHECKING:
     from tests.plugins.fakery import FakeryM  
 
-type PaymentFactory = Callable[
-    [Unpack[_PaymentFactoryParams]], Payment
+type CollectFactory = Callable[
+    [Unpack[_CollectFactoryParams]], Collect
 ]
 
-type PaymentBatchFactory = Callable[[int], list[Payment]]
+type CollectBatchFactory = Callable[[int], list[Collect]]
 
 
-class _PaymentFactoryParams(TypedDict, total=False):
-    """Base params for PaymentFactory."""
+class _CollectFactoryParams(TypedDict, total=False):
+    """Base params for CollectFactory."""
 
-    user: CustomUser
-    collect: Collect
-    amount: Decimal
-    comment: str
-    paid: bool
-    payment_day: timezone.datetime
+    author: CustomUser
+    title: str
+    occasion: OccasionType
+    description: str
+    planned_amount: Decimal
+    end_date: timezone.datetime
 
 
 @pytest.fixture
-def payment_factory(fakery_m: FakeryM[Payment]) -> PaymentFactory:
-    """Return a factory to create Payment instances with custom fields."""
+def collect_factory(fakery_m: FakeryM[Collect]) -> CollectFactory:
+    """Return a factory to create Collect instances with custom fields."""
 
-    def factory(**kwargs: Unpack[_PaymentFactoryParams]) -> Payment:
-        return fakery_m(Payment)(**kwargs)
+    def factory(**kwargs: Unpack[_CollectFactoryParams]) -> Collect:
+        return fakery_m(Collect)(**kwargs)
 
     return factory
 
 
 @pytest.fixture
-def payment(payment_factory: PaymentFactory) -> Payment:
-    """Return a single Payment instance created."""
-    return payment_factory(
-        amount=Decimal(100),
-        comment='Test_comment',
-        paid=True,
-        payment_day=timezone.now()
+def collect(collect_factory: CollectFactory) -> Collect:
+    """Return a single Collect instance created."""
+    return collect_factory(
+        title='Test title',
+        description='Test description',
+        planned_amount=Decimal(5000),
+        end_date=timezone.now() + timezone.timedelta(days=25)
     )
 
 
 @pytest.fixture
-def payment_batch(payment_factory: PaymentFactory) -> PaymentBatchFactory:
-    """Return a factory that creates `batch_size` Payment instances."""
+def collect_batch(collect_factory: CollectFactory) -> CollectBatchFactory:
+    """Return a factory that creates `batch_size` Collect instances."""
 
-    def factory(batch_size: int) -> list[Payment]:
+    def factory(batch_size: int) -> list[Collect]:
         return [
-            payment_factory(comment=f'Test_comment{payment_number}')
-            for payment_number in range(batch_size)
+            collect_factory(
+                title=f'Tets title{collect_number}',
+                description=f'Tets description{collect_number}',
+            )
+            for collect_number in range(batch_size)
         ]
 
     return factory
