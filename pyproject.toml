@@ -43,6 +43,9 @@ pillow = "^11.3.0"
 punq = "^0.7"
 djoser = "^2.3.3"
 djangorestframework-simplejwt = "^5.5.1"
+pytest-faker = "^2.0.0"
+polyfactory = "^2.22.2"
+pytest-mock = "^3.14.1"
 
 
 
@@ -78,6 +81,7 @@ polint = "^0.5"
 dennis = "^1.1"
 dump-env = "^1.5"
 ipython = "^9.5"
+factory-boy = "^3.3.3"
 
 [tool.poetry.group.docs]
 optional = true
@@ -183,3 +187,4 @@ pydocstyle.convention = "google"
 "server/apps/*/migrations/*.py" = ["D101", "E501", "RUF012"]
 "server/common/typing/*.py" = ["F401"]
 "tests/*.py" = ["S101"]
+"server/settings/components/common.py" = ["E501"]

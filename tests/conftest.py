@@ -11,4 +11,5 @@ pytest_plugins = [
     'plugins.django_settings',
     'plugins.fakery',
     # TODO: add your own plugins here!
-]
+    'plugins.payments',
+]  

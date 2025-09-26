@@ -8,6 +8,8 @@ from server.apps.users.serializers import UserSerializer
 
 
 class PaymentSerializer(serializers.ModelSerializer[Payment]):  # type: ignore[misc]
+    """Serializer for Payment model."""
+
     user = UserSerializer(read_only=True)
 
     class Meta:
@@ -24,12 +26,14 @@ class PaymentSerializer(serializers.ModelSerializer[Payment]):  # type: ignore[m
         )
 
     def create(self, validated_data: dict[str, Any]) -> Any:
+        """Create a new payment instance."""
         validated_data['user'] = self.context['request'].user
         payment = super().create(validated_data)
         CollectAmountService.update_collect_amounts(payment.collect)
         return payment
 
     def update(self, instance: Payment, validated_data: dict[str, Any]) -> Any:
+        """Update an existing payment instance."""
         old_paid_status = instance.paid
         new_paid_status = validated_data.get('paid', old_paid_status)
         payment = super().update(instance, validated_data)

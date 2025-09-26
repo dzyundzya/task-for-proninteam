@@ -13,6 +13,8 @@ from server.di import resolve
 
 
 class PaymentViewSet(viewsets.ModelViewSet[Payment]):  # type: ignore[misc]
+    """Serializer for Payment model."""
+
     serializer_class = PaymentSerializer
     http_method_names = ('get', 'post', 'patch')
     permission_classes = (IsPaymentOnwer,)
@@ -25,6 +27,7 @@ class PaymentViewSet(viewsets.ModelViewSet[Payment]):  # type: ignore[misc]
         return queryset
 
     def get_serializer_context(self) -> dict[str, Any]:
+        """Add request to serializer context."""
         context = super().get_serializer_context()
         context['request'] = self.request
         return cast(dict[str, Any], context)
