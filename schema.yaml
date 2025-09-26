@@ -1,0 +1,1047 @@
+openapi: 3.0.2
+info:
+  title: ''
+  version: ''
+paths:
+  /api/collects/:
+    get:
+      operationId: listCollects
+      description: List all collects with pagination.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - count
+                - results
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=4
+                  previous:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=2
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Collect'
+          description: ''
+      tags:
+      - api
+    post:
+      operationId: createCollect
+      description: Create a new collect.
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Collect'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Collect'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Collect'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Collect'
+          description: ''
+      tags:
+      - api
+  /api/collects/{id}/:
+    get:
+      operationId: retrieveCollect
+      description: Retrieve a specific collect by ID.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Collect'
+          description: ''
+      tags:
+      - api
+    patch:
+      operationId: partialUpdateCollect
+      description: Partially update a collect (only by author).
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Collect'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Collect'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Collect'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Collect'
+          description: ''
+      tags:
+      - api
+    delete:
+      operationId: destroyCollect
+      description: Soft delete a collect (only by author).
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - api
+  /api/payments/:
+    get:
+      operationId: listPayments
+      description: Serializer for Payment model.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - count
+                - results
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=4
+                  previous:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=2
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Payment'
+          description: ''
+      tags:
+      - api
+    post:
+      operationId: createPayment
+      description: Serializer for Payment model.
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Payment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Payment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Payment'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+          description: ''
+      tags:
+      - api
+  /api/payments/{id}/:
+    get:
+      operationId: retrievePayment
+      description: Serializer for Payment model.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+          description: ''
+      tags:
+      - api
+    patch:
+      operationId: partialUpdatePayment
+      description: Partial update paument using repo.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Payment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Payment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Payment'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+          description: ''
+      tags:
+      - api
+  /api/auth/users/:
+    get:
+      operationId: listCustomUsers
+      description: ''
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - count
+                - results
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=4
+                  previous:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=2
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+          description: ''
+      tags:
+      - api
+    post:
+      operationId: createCustomUser
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreate'
+          description: ''
+      tags:
+      - api
+  /api/auth/users/me/:
+    get:
+      operationId: meCustomUser
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+      tags:
+      - api
+    put:
+      operationId: meCustomUser
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+      tags:
+      - api
+    patch:
+      operationId: meCustomUser
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+      tags:
+      - api
+    delete:
+      operationId: meCustomUser
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+      - api
+  /api/auth/users/{id}/:
+    get:
+      operationId: retrieveCustomUser
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+      tags:
+      - api
+    put:
+      operationId: updateCustomUser
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+      tags:
+      - api
+    patch:
+      operationId: partialUpdateCustomUser
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+      tags:
+      - api
+    delete:
+      operationId: destroyCustomUser
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - api
+  /api/auth/users/activation/:
+    post:
+      operationId: activationCustomUser
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Activation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Activation'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Activation'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Activation'
+          description: ''
+      tags:
+      - api
+  /api/auth/users/resend_activation/:
+    post:
+      operationId: resendActivationCustomUser
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendEmailReset'
+          description: ''
+      tags:
+      - api
+  /api/auth/users/reset_password/:
+    post:
+      operationId: resetPasswordCustomUser
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendEmailReset'
+          description: ''
+      tags:
+      - api
+  /api/auth/users/reset_password_confirm/:
+    post:
+      operationId: resetPasswordConfirmCustomUser
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirm'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirm'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirm'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PasswordResetConfirm'
+          description: ''
+      tags:
+      - api
+  /api/auth/users/reset_username/:
+    post:
+      operationId: resetUsernameCustomUser
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SendEmailReset'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendEmailReset'
+          description: ''
+      tags:
+      - api
+  /api/auth/users/reset_username_confirm/:
+    post:
+      operationId: resetUsernameConfirmCustomUser
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsernameResetConfirm'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UsernameResetConfirm'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UsernameResetConfirm'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsernameResetConfirm'
+          description: ''
+      tags:
+      - api
+  /api/auth/users/set_password/:
+    post:
+      operationId: setPasswordCustomUser
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetPassword'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetPassword'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SetPassword'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetPassword'
+          description: ''
+      tags:
+      - api
+  /api/auth/users/set_username/:
+    post:
+      operationId: setUsernameCustomUser
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetUsername'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetUsername'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SetUsername'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetUsername'
+          description: ''
+      tags:
+      - api
+  /api/auth/jwt/create/:
+    post:
+      operationId: createTokenObtainPair
+      description: 'Takes a set of user credentials and returns an access and refresh
+        JSON web
+
+        token pair to prove the authentication of those credentials.'
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObtainPair'
+          description: ''
+      tags:
+      - api
+  /api/auth/jwt/refresh/:
+    post:
+      operationId: createTokenRefresh
+      description: 'Takes a refresh type JSON web token and returns an access type
+        JSON web
+
+        token if the refresh token is valid.'
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+      tags:
+      - api
+  /api/auth/jwt/verify/:
+    post:
+      operationId: createTokenVerify
+      description: 'Takes a token and indicates if it is valid.  This view provides
+        no
+
+        information about a token''s fitness for a particular use.'
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenVerify'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenVerify'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenVerify'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenVerify'
+          description: ''
+      tags:
+      - api
+components:
+  schemas:
+    Collect:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        author:
+          type: object
+          properties:
+            id:
+              type: integer
+              readOnly: true
+            username:
+              type: string
+              description: Required. 150 characters or fewer. Letters, digits and
+                @/./+/-/_ only.
+              pattern: ^[\w.@+-]+\z
+              maxLength: 150
+            first_name:
+              type: string
+              maxLength: 150
+            last_name:
+              type: string
+              maxLength: 150
+            email:
+              type: string
+              format: email
+              maxLength: 254
+          required:
+          - username
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        occasion:
+          enum:
+          - birthday
+          - wedding
+          - charity
+          - medical
+          - education
+          - travel
+          - business
+          - other
+          type: string
+        description:
+          type: string
+        planned_amount:
+          type: string
+          format: decimal
+          multipleOf: 0.01
+          maximum: 10000000000
+          minimum: 0
+          nullable: true
+          description: Leave it empty for endless collection.
+        current_amount:
+          type: string
+          format: decimal
+          multipleOf: 0.01
+          maximum: 10000000000
+          minimum: -10000000000
+          readOnly: true
+        donations_count:
+          type: integer
+          readOnly: true
+        cover_image:
+          type: string
+          format: binary
+        end_date:
+          type: string
+          format: date-time
+          nullable: true
+        is_active:
+          type: boolean
+        is_unlimited:
+          type: string
+          readOnly: true
+        progress_percentage:
+          type: string
+          readOnly: true
+        days_remaining:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - title
+    Payment:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: object
+          properties:
+            id:
+              type: integer
+              readOnly: true
+            username:
+              type: string
+              description: Required. 150 characters or fewer. Letters, digits and
+                @/./+/-/_ only.
+              pattern: ^[\w.@+-]+\z
+              maxLength: 150
+            first_name:
+              type: string
+              maxLength: 150
+            last_name:
+              type: string
+              maxLength: 150
+            email:
+              type: string
+              format: email
+              maxLength: 254
+          required:
+          - username
+          readOnly: true
+        collect:
+          type: integer
+        amount:
+          type: string
+          format: decimal
+          multipleOf: 0.01
+          maximum: 10000000000
+          minimum: 1
+        comment:
+          type: string
+        paid:
+          type: boolean
+        payment_day:
+          type: string
+          format: date-time
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - collect
+      - amount
+    User:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          readOnly: true
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+    UserCreate:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+\z
+          maxLength: 150
+        id:
+          type: integer
+          readOnly: true
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - username
+      - password
+    Activation:
+      type: object
+      properties:
+        uid:
+          type: string
+        token:
+          type: string
+      required:
+      - uid
+      - token
+    SendEmailReset:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+      required:
+      - email
+    PasswordResetConfirm:
+      type: object
+      properties:
+        uid:
+          type: string
+        token:
+          type: string
+        new_password:
+          type: string
+      required:
+      - uid
+      - token
+      - new_password
+    UsernameResetConfirm:
+      type: object
+      properties:
+        new_username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+\z
+          maxLength: 150
+      required:
+      - new_username
+    SetPassword:
+      type: object
+      properties:
+        new_password:
+          type: string
+        current_password:
+          type: string
+      required:
+      - new_password
+      - current_password
+    SetUsername:
+      type: object
+      properties:
+        current_password:
+          type: string
+        new_username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+\z
+          maxLength: 150
+      required:
+      - current_password
+      - new_username
+    TokenObtainPair:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - username
+      - password
+    TokenRefresh:
+      type: object
+      properties:
+        refresh:
+          type: string
+        access:
+          type: string
+          readOnly: true
+      required:
+      - refresh
+    TokenVerify:
+      type: object
+      properties:
+        token:
+          type: string
+          writeOnly: true
+      required:
+      - token
