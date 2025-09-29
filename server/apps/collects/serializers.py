@@ -4,6 +4,9 @@ from django.utils.timezone import now
 from rest_framework import serializers
 
 from server.apps.collects.models import Collect
+from server.apps.collects.notification_service import (
+    CollectNotificationService,
+)
 from server.apps.collects.services import CollectAmountService
 from server.apps.users.serializers import UserSerializer
 
@@ -67,4 +70,5 @@ class CollectSerializer(serializers.ModelSerializer[Collect]):  # type: ignore[m
         collect = super().create(validated_data)
 
         CollectAmountService.update_collect_amounts(collect)
+        CollectNotificationService.send_collect_created_email(collect)
         return collect

@@ -2,8 +2,9 @@ from typing import Any
 
 from rest_framework import serializers
 
-from server.apps.collects.services import CollectAmountService
 from server.apps.payments.models import Payment
+from server.apps.collects.notification_service import PaymentNotificationService
+from server.apps.collects.services import CollectAmountService
 from server.apps.users.serializers import UserSerializer
 
 
@@ -30,6 +31,8 @@ class PaymentSerializer(serializers.ModelSerializer[Payment]):  # type: ignore[m
         validated_data['user'] = self.context['request'].user
         payment = super().create(validated_data)
         CollectAmountService.update_collect_amounts(payment.collect)
+        PaymentNotificationService.send_payment_created_email(payment)
+        PaymentNotificationService.send_collect_author_notification(payment)
         return payment
 
     def update(self, instance: Payment, validated_data: dict[str, Any]) -> Any:
@@ -40,4 +43,8 @@ class PaymentSerializer(serializers.ModelSerializer[Payment]):  # type: ignore[m
 
         if new_paid_status != old_paid_status:
             CollectAmountService.update_collect_amounts(payment.collect)
+
+        if new_paid_status and not old_paid_status:
+            PaymentNotificationService.send_payment_paid_email(payment)
+
         return payment
