@@ -23,4 +23,3 @@ class CollectAmountService:
         collect.save(
             update_fields=('current_amount', 'donations_count', 'updated_at')
         )
-        

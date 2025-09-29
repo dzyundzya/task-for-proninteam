@@ -68,28 +68,21 @@ WSGI_APPLICATION = 'server.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': config('POSTGRES_DB'),
-#         'USER': config('POSTGRES_USER'),
-#         'PASSWORD': config('POSTGRES_PASSWORD'),
-#         'HOST': config('DJANGO_DATABASE_HOST'),
-#         'PORT': config('DJANGO_DATABASE_PORT', cast=int),
-#         'CONN_MAX_AGE': config('CONN_MAX_AGE', cast=int, default=60),
-#         'OPTIONS': {
-#             'connect_timeout': 10,
-#             'options': '-c statement_timeout=15000ms',
-#             # consider using 'isolation_level' set to 'serializable'
-#         },
-#     },
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',  # Database engine
-        'NAME': BASE_DIR / 'db.sqlite3',        # Database file path
-    }
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('POSTGRES_DB'),
+        'USER': config('POSTGRES_USER'),
+        'PASSWORD': config('POSTGRES_PASSWORD'),
+        'HOST': config('DJANGO_DATABASE_HOST'),
+        'PORT': config('DJANGO_DATABASE_PORT', cast=int),
+        'CONN_MAX_AGE': config('CONN_MAX_AGE', cast=int, default=60),
+        'OPTIONS': {
+            'connect_timeout': 10,
+            'options': '-c statement_timeout=15000ms',
+            # consider using 'isolation_level' set to 'serializable'
+        },
+    },
 }
 
 # Default primary key field type
@@ -223,11 +216,12 @@ SIMPLE_JWT = {
 }
 
 
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = os.getenv('EMAIL_HOST', default='smtp.gmail.com')
-EMAIL_PORT = os.getenv('EMAIL_PORT', default=587)
-EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', default=True)
+EMAIL_PORT = os.getenv('EMAIL_PORT', default='587')
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', default='True')
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', default='')
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', default='noreply@example.com')
+DEFAULT_FROM_EMAIL = os.getenv(
+    'DEFAULT_FROM_EMAIL', default='noreply@example.com'
+)
